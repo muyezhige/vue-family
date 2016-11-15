@@ -11,7 +11,7 @@
 	<!-- endbuild -->
 	<!-- build:css /wapanchor/css/index-min.css -->
 	<link rel="stylesheet" type="text/css" href="/wapanchor/css/dialog.css">
-	<link rel="stylesheet" type="text/css" href="/wapanchor/css/familyList.css">
+	<link rel="stylesheet" type="text/css" href="/wapanchor/css/familyList.css?v=1">
 	<!-- endbuild -->
 </head>
 <body>
@@ -29,7 +29,6 @@
 		</div>
 		<div class="searchText" v-on:click="searchfamily">搜索</div>
 	</div>
-	<ul class="findResult"></ul>
 	<div v-cloak class="no-result" v-if="hasResult==true">
 		搜索无结果~
 	</div>
@@ -56,7 +55,7 @@
 		</ul>
 	</div>
 	<!-- 搜索结果 -->
-	<div class="tag_content findResult">
+	<div class="tag_content findResult" v-show="searchResult==true">
 		<ul>
 			<list-component v-bind:item="item" :index="$index" v-for="item in searchItems"></list-component>
 			<li class="nextPage" v-cloak v-on:click="nextPage('search')"  v-if="search_next_btn==true">下一页</li>
@@ -79,6 +78,6 @@
 <!--dialog 模板组件 -->
 <script type="text/javascript" src="/wapanchor/js/vue.min.js"></script>
 <script type="text/javascript" src="/wapanchor/js/vue-resource.min.js"></script>
-<script type="text/javascript" src="/wapanchor/js/familyList.js?v=21"></script>
+<script type="text/javascript" src="/wapanchor/js/familyList.js?v=4"></script>
 </body>
 </html>

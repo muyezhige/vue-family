@@ -4,7 +4,7 @@
 		"<ul>" +
 			"<li><i></i>认证家族享受官方快速评级通道。</li>" +
 			"<li><i></i>认证家族享受二级评级特殊通道。</li>" +
-			"<li><i></i>认证家族享受优质三播推送。</li>" +
+			"<li><i></i>认证家族享受优质主播推送。</li>" +
 			"<li><i></i>认证家族享受参与活动优先权。</li>" +
 			"<li><i></i>认证家族享受双方保护利益，并受官方监督。</li>" +
 		"</ul></div>";
@@ -14,11 +14,19 @@
 		"<ul>" +
 			"<li><i></i>认证家族享受官方快速评级通道。</li>" +
 			"<li><i></i>认证家族享受二级评级特殊通道。</li>" +
-			"<li><i></i>认证家族享受优质三播推送。</li>" +
+			"<li><i></i>认证家族享受优质主播推送。</li>" +
 			"<li><i></i>认证家族享受参与活动优先权。</li>" +
 			"<li><i></i>认证家族享受双方保护利益，并受官方监督。</li>" +
 		"</ul></div>";
 
+	var officialText = "<div class='approveText'><h1>该家族为花椒官方家族</h1>" +
+		"<ul>" +
+			"<li><i></i>官方家族享受官方快速评级通道。</li>" +
+			"<li><i></i>官方家族主播可以优先参与官方活动。</li>" +
+			"<li><i></i>官方家族主播享受二次评级特殊通道。</li>" +
+			"<li><i></i>官方家族主播享受优质主播推送。</li>" +
+			"<li><i></i>官方家族金牌主播优先享受官方包装和推广。</li>" +
+		"</ul></div>";
 	
 	// dialog组件
 	Vue.component("dialog-component",{
@@ -51,7 +59,7 @@
 				'<img src="{{item.logo}}">'+
 				'<div class="textBox">'+
 					'<h1>'+
-						'<span>{{item.name}}</span><i class="icon_v" v-if="item.verify_status==4"></i>'+
+						'<span v-html="item.name"></span><i class="icon_v" v-if="item.verify_status==4"></i>'+
 					'</h1>'+
 					'<p>'+
 					'主播数：{{item.mem_num}}<br>'+
@@ -97,6 +105,11 @@
 				}else{
 					vm.dialog.modal_body_html = notApproveText;
 				}
+
+				if(item.boss_id == "29794557" || item.boss_id == "30245957"){
+					vm.dialog.modal_body_html = officialText;
+				}
+
 				vm.joinParam = {
 					f_id: item.id,
 					agent_uid: json.uid
@@ -125,6 +138,7 @@
 			isPage: false,
 			isloading: false,
 			hasResult: false,
+			searchResult: false,
 			// 下一页按钮
 			excellent_next_btn: false,
 			new_next_btn: false,
@@ -201,7 +215,8 @@
 				vm.$http.post("/wapanchor/familyList?search=1", {page_no: 1, kw: vm.inputVal, page_rows: vm.pageRows}).then(function(response){
 					var json = JSON.parse(response.body);
 					vm.isloading = false;
-					vm.search_page_no = false;
+					vm.searchResult = true;
+					vm.search_page_no = 1;
 					if(json.code == "0000"){
 						vm.isPage = true;
 						vm.$set('searchItems', json.data.list);
@@ -214,11 +229,12 @@
 						}
 						if(json.data.pageinfo.have_next){
 							vm.search_next_btn = true;
+						}else{
+							vm.search_next_btn = false;
 						}
 					}else{
 						alert(json.msg);
 					}
-					
 				}, function(error){
 					console.log(error);
 				});
@@ -248,6 +264,7 @@
 				this.inputVal = "";
 				vm.isPage = false;
 				vm.hasResult = false;
+				vm.searchResult = false;
 				this.search_page_no = 1;
 			},
 			// 下一页
